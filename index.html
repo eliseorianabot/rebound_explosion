@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rebound Explosion</title>
+    <style>
+        body {
+            background-color: black;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .core {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #ffcc00, #ff6600, #990000);
+            border-radius: 50%;
+            position: absolute;
+        }
+        .shockwave {
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            position: absolute;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="core" id="core"></div>
+
+    <script>
+        const core = document.getElementById("core");
+
+        function animateCollapse() {
+            core.style.transition = "transform 0.8s ease-in";
+            core.style.transform = "scale(0.1)";
+            setTimeout(animateRebound, 800);
+        }
+
+        function animateRebound() {
+            core.style.transition = "transform 0.2s ease-out";
+            core.style.transform = "scale(1.2)";
+            setTimeout(animateExplosion, 200);
+        }
+
+        function animateExplosion() {
+            core.style.transition = "transform 0.5s ease-in-out, opacity 0.5s ease-in";
+            core.style.transform = "scale(3)";
+            core.style.opacity = "0";
+            createShockwave();
+        }
+
+        function createShockwave() {
+            for (let i = 0; i < 20; i++) {
+                let shockwave = document.createElement("div");
+                shockwave.className = "shockwave";
+                document.body.appendChild(shockwave);
+
+                let angle = Math.random() * Math.PI * 2;
+                let distance = Math.random() * window.innerWidth * 0.5;
+
+                shockwave.style.left = `${window.innerWidth / 2}px`;
+                shockwave.style.top = `${window.innerHeight / 2}px`;
+
+                setTimeout(() => {
+                    shockwave.style.transition = "transform 1s ease-out, opacity 1s ease-out";
+                    shockwave.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(${Math.random() * 3 + 2})`;
+                    shockwave.style.opacity = "0";
+                }, 10);
+
+                setTimeout(() => shockwave.remove(), 1500);
+            }
+        }
+
+        // Start the animation on page load
+        setTimeout(animateCollapse, 500);
+    </script>
+
+</body>
+</html>
+
+"Add explosion simulation"
